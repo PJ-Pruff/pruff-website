@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pruff — Your photos. Your protection. Your proof.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --navy:#0D3B6E;--blue:#1A5DAB;--bright:#4DA3FF;
+    --green:#1A7A4A;--amber:#BA7517;--cream:#FAF8F4;
+    --ink:#1A1A2E;--rule:#DDE6F4;--teal:#0E7490;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(250,248,244,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;}
+  .nav-brand{display:flex;align-items:center;gap:10px;}
+  .nav-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-1px;}
+  .nav-cta{background:var(--navy);color:white;font-size:12px;font-weight:500;padding:8px 18px;border-radius:6px;text-decoration:none;letter-spacing:0.02em;transition:background 0.2s;}
+  .nav-cta:hover{background:var(--blue);}
+
+  /* HERO */
+  .hero{padding:56px 24px 40px;text-align:center;max-width:600px;margin:0 auto;}
+  .hero-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;}
+  .hero-headline{font-family:'Playfair Display',serif;font-size:clamp(32px,8vw,52px);font-weight:700;color:var(--navy);line-height:1.15;letter-spacing:-1.5px;margin-bottom:16px;}
+  .hero-headline em{font-style:italic;color:var(--amber);}
+  .hero-sub{font-size:15px;line-height:1.7;color:#555;font-weight:300;margin-bottom:32px;}
+  .hero-sub strong{color:var(--navy);font-weight:500;}
+
+  /* CTA BUTTONS */
+  .cta-group{display:flex;flex-direction:column;gap:10px;max-width:340px;margin:0 auto 12px;}
+  .btn-primary{display:block;background:var(--navy);color:white;text-align:center;padding:15px 24px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;letter-spacing:0.02em;transition:background 0.2s;}
+  .btn-primary:hover{background:var(--blue);}
+  .btn-secondary{display:block;background:white;color:var(--navy);text-align:center;padding:14px 24px;border-radius:8px;font-size:14px;font-weight:500;border:1.5px solid var(--rule);text-decoration:none;letter-spacing:0.02em;transition:all 0.2s;}
+  .btn-secondary:hover{border-color:var(--navy);}
+
+  /* EMAIL FORM */
+  .notify-form{max-width:340px;margin:0 auto;display:none;}
+  .notify-form.open{display:block;}
+  .notify-label{font-size:11px;color:#888;margin-bottom:6px;text-align:center;}
+  .notify-input-row{display:flex;gap:6px;}
+  .notify-input{flex:1;padding:11px 14px;border:1.5px solid var(--rule);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:white;outline:none;}
+  .notify-input:focus{border-color:var(--navy);}
+  .notify-submit{background:var(--bright);color:white;border:none;padding:11px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+  .notify-submit:hover{background:var(--blue);}
+  .notify-success{text-align:center;font-size:12px;color:var(--green);padding:10px;display:none;}
+
+  /* DIVIDER */
+  .divider{width:40px;height:2px;background:var(--bright);margin:40px auto;}
+
+  /* THE MOMENT */
+  .moment-section{padding:0 24px 40px;max-width:600px;margin:0 auto;text-align:center;}
+  .section-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:#999;margin-bottom:12px;}
+  .moment-quote{font-family:'Playfair Display',serif;font-size:clamp(18px,5vw,26px);line-height:1.45;color:var(--navy);margin-bottom:16px;padding:0 8px;border-left:3px solid var(--amber);text-align:left;}
+  .moment-quote em{font-style:italic;color:var(--amber);}
+  .moment-body{font-size:14px;line-height:1.75;color:#555;font-weight:300;text-align:left;}
+  .moment-body strong{color:var(--navy);font-weight:500;}
+
+  /* STATS */
+  .stats-section{background:var(--navy);padding:28px 24px;position:relative;overflow:hidden;}
+  .stats-section::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--bright),var(--blue));}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:500px;margin:0 auto;}
+  .stat{text-align:center;padding:4px 0;}
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--bright);line-height:1;margin-bottom:4px;}
+  .stat-label{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:0.04em;line-height:1.4;}
+  .stat-wide{grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;margin-top:4px;}
+
+  /* WARNING */
+  .warning-section{background:#FFF8F0;border-top:2px solid var(--amber);border-bottom:1px solid #F0E0C0;padding:16px 24px;}
+  .warning-inner{max-width:600px;margin:0 auto;}
+  .warning-title{font-size:11px;font-weight:600;color:var(--amber);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;}
+  .warning-body{font-size:12px;line-height:1.7;color:#4A3000;font-weight:300;}
+
+  /* TIERS */
+  .tiers-section{padding:36px 24px;max-width:600px;margin:0 auto;}
+  .tiers-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px;}
+  .tiers-sub{font-size:12px;color:#888;text-align:center;margin-bottom:20px;font-weight:300;}
+  .tiers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .tier{background:white;border-radius:10px;padding:14px 14px;border:1px solid var(--rule);}
+  .tier-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;}
+  .tier-name{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+  .tier-price{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;}
+  .tier-body{font-size:11px;line-height:1.5;color:#666;font-weight:300;}
+  .tier:nth-child(1) .tier-num,.tier:nth-child(1) .tier-name{color:#999;}
+  .tier:nth-child(2){border-top:2px solid var(--teal);}
+  .tier:nth-child(2) .tier-num,.tier:nth-child(2) .tier-name{color:var(--teal);}
+  .tier:nth-child(2) .tier-price{color:var(--teal);}
+  .tier:nth-child(3) .tier-num,.tier:nth-child(3) .tier-name{color:var(--green);}
+  .tier:nth-child(3) .tier-price{color:var(--green);}
+  .tier:nth-child(4){border:1.5px solid #F0C060;background:#FFFDF5;}
+  .tier:nth-child(4) .tier-num,.tier:nth-child(4) .tier-name{color:var(--amber);}
+  .tier:nth-child(4) .tier-price{color:var(--amber);}
+
+  /* MISSION */
+  .mission-section{background:var(--navy);padding:32px 24px;text-align:center;}
+  .mission-inner{max-width:500px;margin:0 auto;}
+  .mission-eyebrow{font-size:9px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#7EB8F7;margin-bottom:12px;}
+  .mission-text{font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,20px);line-height:1.6;color:white;font-style:italic;margin-bottom:16px;}
+  .mission-text em{font-style:normal;color:#9FE1CB;font-weight:700;}
+
+  /* CLOSING */
+  .closing-section{padding:32px 24px;max-width:600px;margin:0 auto;text-align:center;}
+  .closing-text{font-size:13px;line-height:1.75;color:#555;font-weight:300;margin-bottom:24px;}
+  .closing-text strong{color:var(--navy);font-weight:500;}
+
+  /* FOOTER */
+  footer{padding:20px 24px;border-top:1px solid var(--rule);display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .footer-brand{display:flex;align-items:center;gap:8px;}
+  .footer-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy);}
+  .footer-tagline{font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:#aaa;}
+  .footer-contact{font-size:10px;color:#bbb;font-weight:300;}
+  .footer-version{font-size:9px;color:#ccc;margin-top:2px;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <svg width="32" height="32" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="27" fill="#0D3B6E"/>
+      <rect x="22" y="18" width="20" height="84" rx="5" fill="white"/>
+      <path d="M42 18 C90 18 90 64 42 64" stroke="white" stroke-width="20" fill="none" stroke-linecap="butt"/>
+      <ellipse cx="62" cy="41" rx="13" ry="14" fill="#4DA3FF"/>
+    </svg>
+    <div class="nav-name">Pruff</div>
+  </div>
+  <a href="mailto:peter@pruff.ai" class="nav-cta">Get in touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">AI-verified rental vehicle protection</div>
+  <h1 class="hero-headline">Your photos.<br>Your protection.<br><em>Your proof.</em></h1>
+  <p class="hero-sub">Pruff gives rental car customers a <strong>cryptographically verified, AI-backed record</strong> of their vehicle's condition — so a damage charge can never be a matter of opinion, memory, or misfortune.</p>
+
+  <div class="cta-group">
+    <a href="mailto:peter@pruff.ai" class="btn-primary">I'm interested — get in touch</a>
+    <a href="#" class="btn-secondary" id="notifyBtn">Notify me when Pruff launches</a>
+  </div>
+
+  <div class="notify-form" id="notifyForm">
+    <div class="notify-label">Enter your email — we'll reach out when we launch.</div>
+    <div class="notify-input-row">
+      <input type="email" class="notify-input" placeholder="your@email.com" id="notifyEmail"/>
+      <button class="notify-submit" onclick="submitNotify()">Notify me</button>
+    </div>
+    <div class="notify-success" id="notifySuccess">✓ You're on the list. We'll be in touch.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THE MOMENT -->
+<section class="moment-section">
+  <div class="section-eyebrow">The problem</div>
+  <div class="moment-quote">
+    You return the rental car.<br>
+    The agent finds a scratch.<br>
+    <em>You didn't cause it</em> — but you have<br>
+    no way to prove it.
+  </div>
+  <p class="moment-body">That moment — the sick feeling of being accused of something you didn't do, with no evidence either way — happens to millions of rental customers every single day. Not because rental companies are dishonest. Not because customers are lying. But because <strong>nobody knows</strong>. The damage might be pre-existing. It might have been caused in the car wash after return. Nobody can say.<br><br>Rental companies have spent a decade building AI scanning systems that detect damage at sub-millimetre resolution. Every one of those tools protects the rental company. <strong>Not one of them protects the consumer.</strong></p>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num">65M</div>
+      <div class="stat-label">North American rentals per year</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">58%</div>
+      <div class="stat-label">of claims are not the renter's fault</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$4,000</div>
+      <div class="stat-label">average disputed damage claim</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">&gt;60%</div>
+      <div class="stat-label">customer win rate with timestamped evidence</div>
+    </div>
+    <div class="stat stat-wide">
+      <div class="stat-num">&lt;12%</div>
+      <div class="stat-label">customer win rate without any documentation</div>
+    </div>
+  </div>
+</section>
+
+<!-- WARNING -->
+<section class="warning-section">
+  <div class="warning-inner">
+    <div class="warning-title">⚠️ Why phone photos alone aren't enough</div>
+    <div class="warning-body">A photo on your phone has no independent verification. The timestamp can be altered, metadata edited, and the file modified without any trace. Rental companies already know this — their own systems use cryptographic hashing and server-side timestamps. Pruff gives every consumer the exact same standard: every photo is hashed, server-timestamped, GPS-tagged, and locked the moment it is taken. It cannot be altered by anyone. That is the difference between a photo and proof.</div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="tiers-section">
+  <h2 class="tiers-headline">Four levels of protection</h2>
+  <p class="tiers-sub">Choose at pick-up · upgrade anytime · Basic is always free</p>
+  <div class="tiers-grid">
+    <div class="tier">
+      <div class="tier-num">1</div>
+      <div class="tier-name">Documented</div>
+      <div class="tier-price">Free</div>
+      <div class="tier-body">Timestamped record at pick-up. Something is always better than nothing.</div>
+    </div>
+    <div class="tier">
+      <div class="tier-num">2</div>
+      <div class="tier-name">Protected</div>
+      <div class="tier-price">$7.99</div>
+      <div class="tier-body">Full pick-up and return walk-around. Ghost overlay comparison. Fast.</div>
+    </div>
+    <div class="tier">
+      <div class="tier-num">3</div>
+      <div class="tier-name">Evidenced</div>
+      <div class="tier-price">$12.99</div>
+      <div class="tier-body">Full AI comparison pick-up to return. Dispute report that speaks for itself.</div>
+    </div>
+    <div class="tier">
+      <div class="tier-num">4</div>
+      <div class="tier-name">Guaranteed</div>
+      <div class="tier-price">$19.99</div>
+      <div class="tier-body">Complete documentation, one-tap dispute pack, $1,000 AI performance guarantee.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission-section">
+  <div class="mission-inner">
+    <div class="mission-eyebrow">Why Pruff exists</div>
+    <p class="mission-text">To eliminate the <em>uncertainty</em> that turns rental returns into disputes — so that damage is never a matter of <em>opinion, memory, or misfortune</em>.</p>
+    <a href="mailto:peter@pruff.ai" class="btn-primary" style="max-width:280px;margin:0 auto;display:block;">Get in touch · peter@pruff.ai</a>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing-section">
+  <p class="closing-text">The market is enormous — millions of Canadian rentals annually, 37 million in North America, hundreds of millions globally. Insurance companies and booking aggregators are actively looking for exactly this solution. <strong>The product doesn't need to create demand. It needs to meet it.</strong></p>
+  <div class="cta-group" style="margin:0 auto;">
+    <a href="mailto:peter@pruff.ai" class="btn-primary">I'm interested — get in touch</a>
+    <a href="#" class="btn-secondary" id="notifyBtn2">Notify me when Pruff launches</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="24" height="24" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="27" fill="#0D3B6E"/>
+      <rect x="22" y="18" width="20" height="84" rx="5" fill="white"/>
+      <path d="M42 18 C90 18 90 64 42 64" stroke="white" stroke-width="20" fill="none" stroke-linecap="butt"/>
+      <ellipse cx="62" cy="41" rx="13" ry="14" fill="#4DA3FF"/>
+    </svg>
+    <div class="footer-name">Pruff</div>
+  </div>
+  <div class="footer-tagline">Your photos. Your protection. Your proof.</div>
+  <div class="footer-contact">peter@pruff.ai · 519 897 1423 · pruff.ai</div>
+  <div class="footer-version">Pruff Limited · V1 · May 25, 2026 · Confidential</div>
+</footer>
+
+<script>
+  // Notify button toggle
+  document.getElementById('notifyBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('notifyForm').classList.toggle('open');
+    this.textContent = document.getElementById('notifyForm').classList.contains('open') ? 'Never mind' : 'Notify me when Pruff launches';
+  });
+  document.getElementById('notifyBtn2').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('notifyForm').classList.add('open');
+    document.getElementById('notifyBtn').textContent = 'Never mind';
+    document.getElementById('notifyForm').scrollIntoView({behavior:'smooth'});
+  });
+
+  // Submit — uses Formspree (free tier · no backend needed)
+  function submitNotify(){
+    const email = document.getElementById('notifyEmail').value;
+    if(!email || !email.includes('@')){
+      alert('Please enter a valid email address.');
+      return;
+    }
+    // Formspree endpoint — replace YOUR_FORM_ID with your Formspree form ID
+    fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,message:'Pruff launch notification request'})
+    }).then(()=>{
+      document.getElementById('notifySuccess').style.display='block';
+      document.getElementById('notifyEmail').style.display='none';
+      document.querySelector('.notify-submit').style.display='none';
+    }).catch(()=>{
+      // Fallback — mailto
+      window.location.href='mailto:peter@pruff.ai?subject=Notify me when Pruff launches&body=Please notify me at: '+email;
+    });
+  }
+</script>
+
+</body>
+</html>
